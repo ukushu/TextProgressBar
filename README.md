@@ -26,12 +26,6 @@ You can find source code here: https://github.com/ukushu/TextProgressBar
 
 # Samples
 
-Have wrote no blinking/flickering TextProgressBar
-
-You can find source code here: https://github.com/ukushu/TextProgressBar
-
-Samples:
-
 NoText:
 
 [![enter image description here][1]][1]
