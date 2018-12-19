@@ -11,13 +11,27 @@ namespace ProgressBarSample
         NoText,
         Percentage,
         CurrProgress,
-        CustomText
+        CustomText,
+        TextAndPercentage,
+        TextAndCurrProgress
     }
 
     public class TextProgressBar : ProgressBar
     {
+        private string _text = string.Empty;
+
         [Description("If it's empty, % will be shown"), Category("Additional Options"), Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
-        public override string Text { get; set; } = "";
+        public override string Text
+        {
+            get {
+                return _text;
+            }
+            set
+            {
+                _text = value;
+                Invalidate();//redraw component after change value from VS Properties section
+            }
+        }
 
         [Description("Font of the text on ProgressBar"), Category("Additional Options")]
         public Font TextFont { get; set; } = new Font(FontFamily.GenericSerif, 12, FontStyle.Bold|FontStyle.Italic);
@@ -62,6 +76,10 @@ namespace ProgressBarSample
             }
         } 
 
+        private string _percentageStr { get { return $"{(int)((float)Value - Minimum) / ((float)Maximum - Minimum) * 100 } %"; } }
+        private string _currProgressStr { get { return $"{Value}/{Maximum}"; } }
+
+
         public TextProgressBar()
         {
             //remove blinking/flickering
@@ -92,10 +110,16 @@ namespace ProgressBarSample
                         text = Text;
                         break;
                     case (ProgressBarDisplayMode.Percentage):
-                        text = $"{(int)((float)Value - Minimum) / ((float)Maximum - Minimum) * 100 } %";
+                        text = _percentageStr;
                         break;
                     case (ProgressBarDisplayMode.CurrProgress):
-                        text = $"{Value}/{Maximum}";
+                        text = _currProgressStr;
+                        break;
+                    case (ProgressBarDisplayMode.TextAndCurrProgress):
+                        text = $"{Text}: {_currProgressStr}";
+                        break;
+                    case (ProgressBarDisplayMode.TextAndPercentage):
+                        text = $"{Text}: {_percentageStr}";
                         break;
                 }
                 
