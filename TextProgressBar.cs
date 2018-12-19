@@ -133,10 +133,11 @@ namespace ProgressBarSample
                 }
                 
                 SizeF len = g.MeasureString(text, TextFont);
-                Point location = new Point(Convert.ToInt32((Width / 2) - len.Width / 2), Convert.ToInt32((Height / 2) - len.Height / 2));
+                Point location = new Point(((Width / 2) - (int)len.Width / 2), ((Height / 2) - (int)len.Height / 2) );
                 
                 g.DrawString(text, TextFont, _textColourBrush, location);
             }
         }
     }
 }
+
