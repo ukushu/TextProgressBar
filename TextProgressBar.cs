@@ -12,7 +12,7 @@ namespace ProgressBarSample
         public bool TextEnabled { get; set; } = true;
 
         [Description("If it's empty, % will be shown"), Category("Additional Options"), Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
-        public override string Text { get; set; } = string.Empty;
+        public override string Text { get; set; } = "";
 
         [Description("Font of the text on ProgressBar"), Category("Additional Options")]
         public Font TextFont { get; set; } = new Font(FontFamily.GenericSerif, 12, FontStyle.Bold|FontStyle.Italic);
@@ -30,16 +30,16 @@ namespace ProgressBarSample
         }
 
         private Brush _progressColourBrush = Brushes.LightGreen;
-        [Category("Additional Options")]
+        [Category("Additional Options"), Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public Color ProgressColor
         {
             get
             {
-                return new Pen(_textColourBrush).Color;
+                return new Pen(_progressColourBrush).Color;
             }
             set
             {
-                _textColourBrush = new SolidBrush(value);
+                _progressColourBrush = new SolidBrush(value);
             }
         }
 
