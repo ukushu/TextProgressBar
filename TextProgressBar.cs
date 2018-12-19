@@ -34,7 +34,7 @@ namespace ProgressBarSample
         }
 
         [Description("Font of the text on ProgressBar"), Category("Additional Options")]
-        public Font TextFont { get; set; } = new Font(FontFamily.GenericSerif, 12, FontStyle.Bold|FontStyle.Italic);
+        public Font TextFont { get; set; } = new Font(FontFamily.GenericSerif, 11, FontStyle.Bold|FontStyle.Italic);
         
         private Brush _textColourBrush = Brushes.Black;
         [Category("Additional Options")]
@@ -137,6 +137,13 @@ namespace ProgressBarSample
                 
                 g.DrawString(text, TextFont, _textColourBrush, location);
             }
+        }
+
+        public new void Dispose()
+        {
+            _textColourBrush.Dispose();
+            _progressColourBrush.Dispose();
+            base.Dispose();
         }
     }
 }
