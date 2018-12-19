@@ -35,15 +35,16 @@ namespace ProgressBarSample
 
         [Description("Font of the text on ProgressBar"), Category("Additional Options")]
         public Font TextFont { get; set; } = new Font(FontFamily.GenericSerif, 12, FontStyle.Bold|FontStyle.Italic);
-
+        
         private Brush _textColourBrush = Brushes.Black;
         [Category("Additional Options")]
         public Color TextColor {
             get {
-                return new Pen(_textColourBrush).Color;
+                return GetBrushColor(_textColourBrush);
             }
             set
             {
+                _textColourBrush.Dispose();
                 _textColourBrush = new SolidBrush(value);
             }
         }
@@ -54,10 +55,11 @@ namespace ProgressBarSample
         {
             get
             {
-                return new Pen(_progressColourBrush).Color;
+                return GetBrushColor(_progressColourBrush);
             }
             set
             {
+                _progressColourBrush.Dispose();
                 _progressColourBrush = new SolidBrush(value);
             }
         }
@@ -71,7 +73,6 @@ namespace ProgressBarSample
             set
             {
                 _visualMode = value;
-                
                 Invalidate();//redraw component after change value from VS Properties section
             }
         } 
@@ -79,6 +80,14 @@ namespace ProgressBarSample
         private string _percentageStr { get { return $"{(int)((float)Value - Minimum) / ((float)Maximum - Minimum) * 100 } %"; } }
         private string _currProgressStr { get { return $"{Value}/{Maximum}"; } }
 
+        private Color GetBrushColor(Brush brush)
+        {
+            var pen = new Pen(brush);
+            var penColor = pen.Color;
+            pen.Dispose();
+
+            return penColor;
+        }
 
         public TextProgressBar()
         {
@@ -90,7 +99,7 @@ namespace ProgressBarSample
         {
             Rectangle rect = ClientRectangle;
             Graphics g = e.Graphics;
-
+            
             ProgressBarRenderer.DrawHorizontalBar(g, rect);
             rect.Inflate(-3, -3);
             if (Value > 0)
@@ -123,7 +132,6 @@ namespace ProgressBarSample
                         break;
                 }
                 
-                
                 SizeF len = g.MeasureString(text, TextFont);
                 Point location = new Point(Convert.ToInt32((Width / 2) - len.Width / 2), Convert.ToInt32((Height / 2) - len.Height / 2));
                 
@@ -132,4 +140,3 @@ namespace ProgressBarSample
         }
     }
 }
-
