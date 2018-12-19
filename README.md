@@ -13,3 +13,14 @@ Have following properties in Visual Studio Properties section:
 
 So its really simple in use.
 
+Sample 1:
+
+[![no blinking/flickering TextProgressBar][1]][1]
+
+Sample 2:
+
+[![no blinking/flickering TextProgressBar][2]][2]
+
+
+  [1]: https://i.stack.imgur.com/mMy7Y.gif
+  [2]: https://i.stack.imgur.com/g1uPL.gif
