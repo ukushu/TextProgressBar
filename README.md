@@ -14,7 +14,7 @@ Have following properties in Visual Studio Properties section:
    - TextAndCurrProgress - "CustomText: 256/500"
 * TextColour
 * TextFont
-* Text - display custom text. If empty - displays progress in %
+* Text - display custom text in case of selection mode with customText support.
 * ProgressColor
 
 So its really simple in use.
