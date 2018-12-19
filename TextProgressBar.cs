@@ -121,10 +121,14 @@ namespace ProgressBarSample
 
         public TextProgressBar()
         {
-            //remove blinking/flickering
+            FixComponentBlinking();
+        }
+
+        private void FixComponentBlinking()
+        {
             SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
         }
-        
+
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
