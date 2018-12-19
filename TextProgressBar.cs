@@ -6,11 +6,16 @@ using System.Windows.Forms;
 
 namespace ProgressBarSample
 {
+    public enum ProgressBarDisplayMode
+    {
+        NoText,
+        Percentage,
+        CurrProgress,
+        CustomText
+    }
+
     public class TextProgressBar : ProgressBar
     {
-        [Description("Do you need to display any text or not"), Category("Additional Options")]
-        public bool TextEnabled { get; set; } = true;
-
         [Description("If it's empty, % will be shown"), Category("Additional Options"), Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public override string Text { get; set; } = "";
 
@@ -43,6 +48,20 @@ namespace ProgressBarSample
             }
         }
 
+        private ProgressBarDisplayMode _visualMode = ProgressBarDisplayMode.CurrProgress;
+        [Category("Additional Options"), Browsable(true)]
+        public ProgressBarDisplayMode VisualMode {
+            get {
+                return _visualMode;
+            }
+            set
+            {
+                _visualMode = value;
+                
+                Invalidate();//redraw component after change value from VS Properties section
+            }
+        } 
+
         public TextProgressBar()
         {
             //remove blinking/flickering
@@ -63,10 +82,23 @@ namespace ProgressBarSample
                 e.Graphics.FillRectangle(_progressColourBrush, clip);
             }
 
-            if (TextEnabled)
+            if ( VisualMode != ProgressBarDisplayMode.NoText )
             {
-                // Display % in case of CustomText is empty;
-                string text = (Text == null || Text.Length == 0) ? $"{Value} %" : Text;
+                string text = string.Empty;
+
+                switch (VisualMode)
+                {
+                    case (ProgressBarDisplayMode.CustomText):
+                        text = Text;
+                        break;
+                    case (ProgressBarDisplayMode.Percentage):
+                        text = $"{(int)((float)Value - Minimum) / ((float)Maximum - Minimum) * 100 } %";
+                        break;
+                    case (ProgressBarDisplayMode.CurrProgress):
+                        text = $"{Value}/{Maximum}";
+                        break;
+                }
+                
                 
                 SizeF len = g.MeasureString(text, TextFont);
                 Point location = new Point(Convert.ToInt32((Width / 2) - len.Width / 2), Convert.ToInt32((Height / 2) - len.Height / 2));
