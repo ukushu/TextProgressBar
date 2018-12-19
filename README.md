@@ -5,7 +5,13 @@ Component based on ProgressBar;
 
 Have following properties in Visual Studio Properties section:
 
-* TextEnabled - enable/disable text display
+* Visual mode:
+   - NoText - no text displayed over ProgressBar
+   - Percentage - How many % passed
+   - CurrProgress - "256/500"
+   - CustomText - display Text
+   - TextAndPercentage - "CustomText: 50%"
+   - TextAndCurrProgress - "CustomText: 256/500"
 * TextColour
 * TextFont
 * Text - display custom text. If empty - displays progress in %
