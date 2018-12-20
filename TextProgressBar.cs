@@ -20,11 +20,11 @@ namespace ProgressBarSample
         [Description("Font of the text on ProgressBar"), Category("Additional Options")]
         public Font TextFont { get; set; } = new Font(FontFamily.GenericSerif, 11, FontStyle.Bold|FontStyle.Italic);
         
-        private Brush _textColourBrush = Brushes.Black;
+        private SolidBrush _textColourBrush = (SolidBrush) Brushes.Black;
         [Category("Additional Options")]
         public Color TextColor {
             get {
-                return GetBrushColor(_textColourBrush);
+                return _textColourBrush.Color;
             }
             set
             {
@@ -33,13 +33,13 @@ namespace ProgressBarSample
             }
         }
 
-        private Brush _progressColourBrush = Brushes.LightGreen;
+        private SolidBrush _progressColourBrush = (SolidBrush) Brushes.LightGreen;
         [Category("Additional Options"), Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public Color ProgressColor
         {
             get
             {
-                return GetBrushColor(_progressColourBrush);
+                return _progressColourBrush.Color;
             }
             set
             {
@@ -64,7 +64,7 @@ namespace ProgressBarSample
         private string _text = string.Empty;
 
         [Description("If it's empty, % will be shown"), Category("Additional Options"), Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
-        public override string Text
+        public string CustomText
         {
             get
             {
@@ -81,13 +81,10 @@ namespace ProgressBarSample
         {
             get
             {
-                string text = string.Empty;
+                string text = CustomText;
 
                 switch (VisualMode)
                 {
-                    case (ProgressBarDisplayMode.CustomText):
-                        text = Text;
-                        break;
                     case (ProgressBarDisplayMode.Percentage):
                         text = _percentageStr;
                         break;
@@ -95,32 +92,30 @@ namespace ProgressBarSample
                         text = _currProgressStr;
                         break;
                     case (ProgressBarDisplayMode.TextAndCurrProgress):
-                        text = $"{Text}: {_currProgressStr}";
+                        text = $"{CustomText}: {_currProgressStr}";
                         break;
                     case (ProgressBarDisplayMode.TextAndPercentage):
-                        text = $"{Text}: {_percentageStr}";
+                        text = $"{CustomText}: {_percentageStr}";
                         break;
                 }
 
                 return text;
             }
+            set { }
         }
         
         private string _percentageStr { get { return $"{(int)((float)Value - Minimum) / ((float)Maximum - Minimum) * 100 } %"; } }
 
-        private string _currProgressStr { get { return $"{Value}/{Maximum}"; } }
-
-        private Color GetBrushColor(Brush brush)
-        {
-            var pen = new Pen(brush);
-            var penColor = pen.Color;
-            pen.Dispose();
-
-            return penColor;
+        private string _currProgressStr {
+            get
+            {
+                return $"{Value}/{Maximum}";
+            }
         }
-
+        
         public TextProgressBar()
         {
+            Value = Minimum;
             FixComponentBlinking();
         }
 
@@ -158,12 +153,14 @@ namespace ProgressBarSample
         {
             if (VisualMode != ProgressBarDisplayMode.NoText)
             {
+                
                 string text = _textToDraw;
 
                 SizeF len = g.MeasureString(text, TextFont);
-                Point location = new Point(((Width / 2) - (int)len.Width / 2), ((Height / 2) - (int)len.Height / 2));
 
-                g.DrawString(text, TextFont, _textColourBrush, location);
+                Point location = new Point(((Width / 2) - (int)len.Width / 2), ((Height / 2) - (int)len.Height / 2));
+                
+                g.DrawString(text, TextFont, (Brush)_textColourBrush, location);
             }
         }
         
